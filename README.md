@@ -2,6 +2,7 @@
 Building a simple regressor that predicts the review star of given food text review, **80%** accuracy was achieved and about **0.38** **M**ean-**S**quared **E**rror (MSE).
 # How it Works
 A neural network with Embedding layer as first layer, **L**ong & **S**hort **T**erm **M**emory (LSTMs) since text is sequential data, then one fully connected neuron (dense) with linear activation function for regression ( continuous ratings ). The basic architecture is in the image below:
+
 ![alt text](images/network_diagram.png)
 # Requirements
 - ## Dataset
