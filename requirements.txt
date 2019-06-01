@@ -1,6 +1,6 @@
 keras==2.2.4
 tensorflow==1.12.1
 numpy
+sklearn
 pandas
-sklearn==0.20.2
 tqdm==4.28.1
