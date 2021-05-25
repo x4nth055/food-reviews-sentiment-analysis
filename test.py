@@ -39,11 +39,20 @@ model.load_weights("results/model_V20_0.38_0.80.h5")
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Food Review evaluator")
-    parser.add_argument("review", type=str, help="The review of the product in text")
-    args = parser.parse_args()
+    try:
+        parser = argparse.ArgumentParser(description="Food Review evaluator")
+        parser.add_argument("review", type=str, help="The review of the product in text")
+        args = parser.parse_args()
 
-    review = tokenize_words(clean_text(args.review), vocab2int)
+        review = tokenize_words(clean_text(args.review), vocab2int)
+        x = pad_sequences([review], maxlen=sequence_length)
+
+        print(f"{model.predict(x)[0][0]:.2f}/5")
+    except Exception as e:
+        print(e)
+        print("this script was run without feeing any arguements")
+
+def spitter(inputstring):
+    review = tokenize_words(clean_text(inputstring), vocab2int)
     x = pad_sequences([review], maxlen=sequence_length)
-
-    print(f"{model.predict(x)[0][0]:.2f}/5")
+    return model.predict(x)[0][0]
