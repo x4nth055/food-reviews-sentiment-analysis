@@ -9,7 +9,8 @@ sys.stderr = stderr
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 
 config = tf.ConfigProto(intra_op_parallelism_threads=5,
 
@@ -38,11 +39,20 @@ model.load_weights("results/model_V20_0.38_0.80.h5")
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Food Review evaluator")
-    parser.add_argument("review", type=str, help="The review of the product in text")
-    args = parser.parse_args()
+    try:
+        parser = argparse.ArgumentParser(description="Food Review evaluator")
+        parser.add_argument("review", type=str, help="The review of the product in text")
+        args = parser.parse_args()
 
-    review = tokenize_words(clean_text(args.review), vocab2int)
+        review = tokenize_words(clean_text(args.review), vocab2int)
+        x = pad_sequences([review], maxlen=sequence_length)
+
+        print(f"{model.predict(x)[0][0]:.2f}/5")
+    except Exception as e:
+        print(e)
+        print("this script was run without feeing any arguements")
+
+def spitter(inputstring):
+    review = tokenize_words(clean_text(inputstring), vocab2int)
     x = pad_sequences([review], maxlen=sequence_length)
-
-    print(f"{model.predict(x)[0][0]:.2f}/5")
+    return model.predict(x)[0][0]
